@@ -51,3 +51,9 @@ require("lazy").setup({
     },
   },
 })
+
+local fzf = require("fzf-lua")
+vim.keymap.set("n", "<C-p>", fzf.files, {})
+vim.keymap.set("n", "<C-S-f>", fzf.live_grep, {})
+vim.keymap.set("n", "<leader>fb", fzf.buffers, {})
+vim.keymap.set("n", "<leader>fh", fzf.helptags, {})
