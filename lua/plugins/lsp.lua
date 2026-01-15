@@ -2,19 +2,14 @@ return {
   {
     "mason-org/mason.nvim",
     opts = {
-      ensure_installed = {
-        "lexical",
-      },
+      ensure_installed = {},
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        -- Disable conflicting LSP servers (using lexical instead)
-        nextls = false,
-        expert = true,
-        -- lexical is configured via elixir.lua
+        -- Elixir LSP is managed by elixir-tools.nvim
       },
     },
   },

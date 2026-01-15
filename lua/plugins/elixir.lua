@@ -1,29 +1,36 @@
 return {
-  -- Expert LSP for Elixir (using built-in LSP config for nvim 0.11.5+)
+  -- Elixir Tools - comprehensive Elixir development support
   {
-    "neovim/nvim-lspconfig",
-    opts = function(_, opts)
-      -- Disable other Elixir LSP servers
-      opts.servers = opts.servers or {}
-      opts.servers.lexical = false
-      opts.servers.nextls = false
+    "elixir-tools/elixir-tools.nvim",
+    version = "*",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local elixir = require("elixir")
+      local elixirls = require("elixir.elixirls")
 
-      -- Configure Expert using built-in LSP
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "elixir", "eelixir", "heex" },
-        callback = function()
-          vim.lsp.config('expert', {
-            cmd = { '/Users/pleuvens/expert/apps/expert/burrito_out/expert_darwin_arm64', '--stdio' },
-            root_markers = { 'mix.exs', '.git' },
-            filetypes = { 'elixir', 'eelixir', 'heex' },
-          })
-          vim.lsp.enable('expert')
-        end,
-        once = true,
+      elixir.setup({
+        nextls = { enable = false },
+        elixirls = {
+          enable = true,
+          settings = elixirls.settings({
+            dialyzerEnabled = true,
+            enableTestLenses = true,
+          }),
+          on_attach = function(client, bufnr)
+            -- Pipe operator transformations
+            vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })
+            vim.keymap.set("n", "<space>tp", ":ElixirToPipe<cr>", { buffer = true, noremap = true })
+            vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<cr>", { buffer = true, noremap = true })
+          end,
+        },
+        projectionist = {
+          enable = true,
+        },
       })
-
-      return opts
     end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
   },
 
   -- Mix format on save
