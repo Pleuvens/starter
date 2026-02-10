@@ -54,6 +54,9 @@ return {
           command = "mix",
           args = { "format", "-" },
           stdin = true,
+          env = {
+            MIX_QUIET = "1",
+          },
         },
       },
     },
